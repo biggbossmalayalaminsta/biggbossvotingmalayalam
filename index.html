@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>BiggBoss Voting</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+<style>
+body {
+margin: 0;
+font-family: 'Poppins', sans-serif;
+background-color: #0d0d0d; /* cite: 2 */
+color: white;
+}
+.top-bar, .bottom-bar {
+display: flex;
+justify-content: space-around;
+align-items: center;
+background: #1a1a1a;
+padding: 10px 20px;
+}
+.top-bar img, .bottom-card img {
+width: 70px; /* cite: 3 */
+height: 70px; /* cite: 3 */
+object-fit: cover;; /* cite: 3 */
+}
+.top-bar div, .bottom-card {
+text-align: center;
+font-size: 12px;
+}
+.center-logo { height: 60px; object-fit: contain; } /* cite: 4 */
+h1, h2 { text-align: center; margin: 10px 0; }
+h1 { font-size: 24px; /* cite: 5 */ }
+h2 { font-size: 18px; color: #a94eff; } /* cite: 5 */
+.progress-section { padding: 10px 20px; } /* cite: 5 */
+.progress-row {
+display: flex;
+align-items: center;
+margin-bottom: 20px;
+}
+.progress-row img {
+width: 50px; /* cite: 6 */
+height: 50px; /* cite: 6 */
+border-radius: 50%; /* cite: 6 */
+border: 3px solid #a94eff; /* cite: 6 */
+margin-right: 10px; /* cite: 6 */
+}
+.progress-bar-container {
+flex: 1; /* cite: 7 */
+background: #2a2a2a; /* cite: 7 */
+border-radius: 10px; /* cite: 7 */
+overflow: hidden; /* cite: 7 */
+height: 20px; /* cite: 7 */
+}
+.progress-fill {
+height: 100%; /* cite: 7 */
+background: linear-gradient(to right, #a94eff, #5c00b3); /* cite: 7 */
+width: 0%; /* cite: 7 */
+border-radius: 10px; /* cite: 8 */
+transition: width 0.3s; /* cite: 8 */
+}
+.percent { margin-left: 10px; } /* cite: 8 */
+.vote-box {
+background: #1e1e1e; /* cite: 8 */
+border-radius: 20px; /* cite: 8 */
+padding: 20px; /* cite: 8 */
+margin: 30px 20px; /* cite: 8 */
+text-align: center; /* cite: 9 */
+}
+.vote-options {
+display: flex; /* cite: 9 */
+justify-content: space-around; /* cite: 9 */
+flex-wrap: wrap; /* cite: 9 */
+gap: 10px; /* cite: 9 */
+}
+.vote-card {
+display: flex; /* cite: 9 */
+flex-direction: column; /* cite: 9 */
+align-items: center; /* cite: 9 */
+}
+.vote-card img {
+width: 60px; /* cite: 10 */
+height: 60px; /* cite: 10 */
+border-radius: 50%; /* cite: 10 */
+border: 3px solid #a94eff; /* cite: 10 */
+}
+.vote-card button {
+margin-top: 5px; /* cite: 10 */
+background: linear-gradient(to right, #a94eff, #5c00b3); /* cite: 11 */
+border: none; /* cite: 11 */
+padding: 5px 15px; /* cite: 11 */
+color: white; /* cite: 11 */
+border-radius: 10px; /* cite: 11 */
+font-weight: bold; /* cite: 11 */
+cursor: pointer; /* cite: 11 */
+}
+/* ADDED: Style for individual vote count display */
+.your-votes-display {
+    font-size: 11px; /* Smaller font size for clarity */
+    color: #bbb;
+    margin-top: 5px; /* Space from the button */
+}
+.your-votes-count {
+    font-weight: bold;
+    color: #a94eff; /* Highlighted color */
+}
+
+
+.follow-btn {
+background: #3399ff; /* cite: 12 */
+color: white; /* cite: 12 */
+padding: 5px 15px; /* cite: 12 */
+border-radius: 8px; /* cite: 12 */
+font-weight: bold; /* cite: 12 */
+border: none; /* cite: 12 */
+}
+.bottom-card p{
+margin: 5px 0; /* cite: 12 */
+font-size: 12px; /* cite: 12 */
+}
+
+/* Custom Modal Styles */
+.modal-overlay {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: #1a1a1a;
+    margin: auto;
+    padding: 30px;
+    border-radius: 15px;
+    width: 80%; /* Could be responsive */
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    color: white;
+    font-size: 16px;
+}
+
+.modal-content h4 {
+    margin-top: 0;
+    color: #a94eff;
+    font-size: 20px;
+}
+
+.modal-content button {
+    background: linear-gradient(to right, #a94eff, #5c00b3);
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 16px;
+}
+</style>
+</head>
+<body>
+<div class="top-bar">
+<div><img src="logo1.png"><p>BIGGBOSS<br>MALAYALAM_INSTA</p></div>
+<img src="biggboss-logo.png" class="center-logo">
+<div><img src="logo2.png"><p>ALL ABOUT<br>BIGG BOSS</p></div>
+</div>
+<h1>BIGGBOSS MALAYALAM SEASON 7<br> UNOFFICIAL VOTING</h1>
+<h2>WEEK ONE</h2>
+<div class="progress-section">
+<div class="progress-row"><img src="user1.png"><div
+class="progress-bar-container"><div class="progress-fill" id="bar1"></div></div><div
+class="percent" id="percent1">0%</div></div>
+<div class="progress-row"><img src="user2.png"><div
+class="progress-bar-container"><div class="progress-fill" id="bar2"></div></div><div
+class="percent" id="percent2">0%</div></div>
+<div class="progress-row"><img src="user3.png"><div
+class="progress-bar-container"><div class="progress-fill" id="bar3"></div></div><div
+class="percent" id="percent3">0%</div></div>
+<div class="progress-row"><img src="user4.png"><div
+class="progress-bar-container"><div class="progress-fill" id="bar4"></div></div><div
+class="percent" id="percent4">0%</div></div>
+<div class="progress-row"><img src="user5.png"><div
+class="progress-bar-container"><div class="progress-fill" id="bar5"></div></div><div
+class="percent" id="percent5">0%</div></div>
+<div class="progress-row"><img src="user6.png"><div
+class="progress-bar-container"><div class="progress-fill" id="bar6"></div></div><div
+class="percent" id="percent6">0%</div></div>
+<div class="progress-row"><img src="user7.png"><div
+class="progress-bar-container"><div class="progress-fill" id="bar7"></div></div><div
+class="percent" id="percent7">0%</div></div>
+<div class="progress-row"><img src="user8.png"><div
+class="progress-bar-container"><div class="progress-fill" id="bar8"></div></div><div
+class="percent" id="percent8">0%</div></div>
+<div class="progress-row"><img src="user9.png"><div
+class="progress-bar-container"><div class="progress-fill" id="bar9"></div></div><div
+class="percent" id="percent9">0%</div></div>
+<div class="progress-row"><img src="user10.png"><div
+class="progress-bar-container"><div class="progress-fill" id="bar10"></div></div><div
+class="percent" id="percent10">0%</div></div>
+</div>
+<div class="vote-box">
+<h3>Vote Now</h3>
+<p id="voteStatus" style="text-align:center; font-size: 14px; color:lightgray; margin-top:10px;"></p>
+<div class="vote-options">
+<div class="vote-card">
+    <img src="user1.png">
+    <p>Maya</p>
+    <button onclick="vote(0)">VOTE</button>
+    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-0">0</span></p>
+</div>
+<div class="vote-card">
+    <img src="user2.png">
+    <p>Adithyan</p>
+    <button onclick="vote(1)">VOTE</button>
+    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-1">0</span></p>
+</div>
+<div class="vote-card">
+    <img src="user3.png">
+    <p>Binesh</p>
+    <button onclick="vote(2)">VOTE</button>
+    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-2">0</span></p>
+</div>
+<div class="vote-card">
+    <img src="user4.png">
+    <p>Anumol</p>
+    <button onclick="vote(3)">VOTE</button>
+    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-3">0</span></p>
+</div>
+<div class="vote-card">
+    <img src="user5.png">
+    <p>Akshay</p>
+    <button onclick="vote(4)">VOTE</button>
+    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-4">0</span></p>
+</div>
+<div class="vote-card">
+    <img src="user6.png">
+    <p>Sankeerth</p>
+    <button onclick="vote(5)">VOTE</button>
+    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-5">0</span></p>
+</div>
+<div class="vote-card">
+    <img src="user7.png">
+    <p>Adharv</p>
+    <button onclick="vote(6)">VOTE</button>
+    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-6">0</span></p>
+</div>
+<div class="vote-card">
+    <img src="user8.png">
+    <p>Athul</p>
+    <button onclick="vote(7)">VOTE</button>
+    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-7">0</span></p>
+</div>
+<div class="vote-card">
+    <img src="user9.png">
+    <p>Suriyakiran</p>
+    <button onclick="vote(8)">VOTE</button>
+    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-8">0</span></p>
+</div>
+<div class="vote-card">
+    <img src="user10.png">
+    <p>Rayyan</p>
+    <button onclick="vote(9)">VOTE</button>
+    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-9">0</span></p>
+</div>
+</div>
+</div>
+<div class="bottom-bar">
+<div class="bottom-card">
+<img src="logo1.png">
+<p>BIGGBOSS
+MALAYALAM_INSTA</p>
+<a href="https://www.instagram.com/biggbossmalayalam_insta" target="_blank"><button
+class="follow-btn">FOLLOW</button></a>
+</div>
+<div class="bottom-card">
+<img src="logo2.png">
+<p>ALL ABOUT BIGG BOSS</p>
+<a href="https://www.instagram.com/allaboutbiggboss" target="_blank"><button
+class="follow-btn">FOLLOW</button></a>
+</div>
+</div>
+<p style="text-align:center; font-size:12px; color:gray; padding:20px;">
+This is a fan-made voting simulation. This is not an official affiliation with Bigg Boss, Asianet, or JioHotstar. We are not responsible for any problems caused by this website.
+</p>
+
+<div id="myModal" class="modal-overlay">
+    <div class="modal-content">
+        <h4 id="modalTitle"></h4>
+        <p id="modalMessage"></p>
+        <button onclick="closeModal()">OK</button>
+    </div>
+</div>
+
+<script>
+const firebaseConfig = {
+apiKey: "AIzaSyCWs_SbP-PhVXwEZQdOIk_ViupZBviHUk0", /* cite: 17 */
+authDomain: "biggboss-voting-malayalam.firebaseapp.com", /* cite: 17 */
+databaseURL: "https://biggboss-voting-malayalam-default-rtdb.firebaseio.com", /* cite: 17 */
+projectId: "biggboss-voting-malayalam", /* cite: 17 */
+storageBucket: "biggboss-voting-malayalam.firebasestorage.app", /* cite: 17 */
+messagingSenderId: "912043278492", /* cite: 17 */
+appId: "1:912043278492:web:b71817eb68bc7733852d59" /* cite: 17 */
+};
+firebase.initializeApp(firebaseConfig); /* cite: 17 */
+const db = firebase.database(); /* cite: 17 */
+
+const voteCounts = [0,0,0,0,0,0,0,0,0,0]; /* cite: 17 */
+let voteCount = parseInt(localStorage.getItem("voteCount")) || 0; /* cite: 18 */
+let voteStartTime = parseInt(localStorage.getItem("voteStartTime")) || 0; /* cite: 18 */
+const voteLimit = 50; // updated vote limit to 50
+const voteWindow = 24 * 60 * 60 * 1000; // 24 hours (unchanged, but daily reset logic is new) /* cite: 19 */
+
+// MODIFICATION START: New array to store individual user votes for each contestant
+let userIndividualVotes = new Array(voteCounts.length).fill(0);
+
+function getMidnightTimestamp() {
+    const now = new Date();
+    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
+    return midnight.getTime();
+}
+
+function updateVoteStatus() {
+    const remaining = Math.max(0, voteLimit - voteCount);
+    const statusText = `${remaining} vote${remaining === 1 ? '' : 's'} left today`;
+    const statusEl = document.getElementById("voteStatus");
+    if (statusEl) {
+        statusEl.innerText = statusText;
+    }
+}
+
+// MODIFICATION START: Function to initialize and update individual user vote displays
+function initializeIndividualVotes() {
+    for (let i = 0; i < userIndividualVotes.length; i++) {
+        const storedUserVotes = localStorage.getItem(`userVotes_contestant_${i}`);
+        if (storedUserVotes) {
+            userIndividualVotes[i] = parseInt(storedUserVotes);
+        } else {
+            userIndividualVotes[i] = 0;
+        }
+        updateIndividualVoteDisplay(i);
+    }
+}
+
+function updateIndividualVoteDisplay(index) {
+    const displayElement = document.getElementById(`user-votes-${index}`);
+    if (displayElement) {
+        displayElement.textContent = userIndividualVotes[index];
+    }
+}
+// MODIFICATION END
+
+
+function updateUI() {
+    const total = voteCounts.reduce((a,b)=>a+b,0); /* cite: 21 */
+    voteCounts.forEach((count, i) => {
+        const percent = total ? Math.round((count / total) * 100) : 0; /* cite: 21 */
+        document.getElementById("bar" + (i + 1)).style.width = percent + "%"; /* cite: 21 */
+        document.getElementById("percent" + (i + 1)).innerText = percent + "%"; /* cite: 21 */
+    });
+}
+
+function fetchVotes() {
+    db.ref("votes").on("value", (snapshot) => { /* cite: 22 */
+        const data = snapshot.val(); /* cite: 22 */
+        if (data) { /* cite: 22 */
+            voteCounts[0] = data.vote1 || 0; /* cite: 22 */
+            voteCounts[1] = data.vote2 || 0; /* cite: 22 */
+            voteCounts[2] = data.vote3 || 0; /* cite: 23 */
+            voteCounts[3] = data.vote4 || 0; /* cite: 23 */
+            voteCounts[4] = data.vote5 || 0; /* cite: 23 */
+            voteCounts[5] = data.vote6 || 0; /* cite: 23 */
+            voteCounts[6] = data.vote7 || 0; /* cite: 23 */
+            voteCounts[7] = data.vote8 || 0; /* cite: 23 */
+            voteCounts[8] = data.vote9 || 0; /* cite: 23 */
+            voteCounts[9] = data.vote10 || 0; /* cite: 23 */
+        }
+        updateUI(); /* cite: 24 */
+    });
+}
+
+// Functions for the custom modal
+function showModal(title, message) {
+    document.getElementById("modalTitle").innerText = title;
+    document.getElementById("modalMessage").innerText = message;
+    document.getElementById("myModal").style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById("myModal").style.display = "none";
+}
+
+function vote(index) {
+    const now = Date.now();
+    const nextMidnight = getMidnightTimestamp();
+
+    // Check if a new day has started or if it's the very first vote
+    if (voteStartTime === 0 || now >= nextMidnight) {
+        voteCount = 0; // Reset total vote count
+        voteStartTime = now; // Set new start time
+        localStorage.setItem("voteStartTime", voteStartTime);
+        localStorage.setItem("voteCount", voteCount);
+        // MODIFICATION START: Reset individual user votes as well
+        userIndividualVotes.fill(0);
+        for (let i = 0; i < userIndividualVotes.length; i++) {
+            localStorage.setItem(`userVotes_contestant_${i}`, 0);
+            updateIndividualVoteDisplay(i); // Update display after reset
+        }
+        // MODIFICATION END
+    }
+
+    if (voteCount >= voteLimit) {
+    // Show modal saying limit reached
+    const timeLeft = nextMidnight - now;
+    const hrs = Math.floor(timeLeft / (1000 * 60 * 60));
+    const mins = Math.ceil((timeLeft % (1000 * 60 * 60)) / 60000);
+    let timeMessage = "";
+    if (hrs > 0) {
+        timeMessage += `${hrs} hour${hrs === 1 ? '' : 's'} `;
+    }
+    timeMessage += `${mins} minute${mins === 1 ? '' : 's'}`;
+
+    showModal("Vote Limit Reached!", `Today's voting limit reached. Come back after ${timeMessage}. Thanks for Voting.`);
+    return;
+}
+
+    
+
+    db.ref("votes").once("value").then((snapshot) => { /* cite: 27 */
+        const data = snapshot.val() || {}; /* cite: 27 */
+        voteCounts[0] = data.vote1 || 0; /* cite: 27 */
+        voteCounts[1] = data.vote2 || 0; /* cite: 27 */
+        voteCounts[2] = data.vote3 || 0; /* cite: 28 */
+        voteCounts[3] = data.vote4 || 0; /* cite: 28 */
+        voteCounts[4] = data.vote5 || 0; /* cite: 28 */
+        voteCounts[5] = data.vote6 || 0; /* cite: 28 */
+        voteCounts[6] = data.vote7 || 0; /* cite: 28 */
+        voteCounts[7] = data.vote8 || 0; /* cite: 28 */
+        voteCounts[8] = data.vote9 || 0; /* cite: 28 */
+        voteCounts[9] = data.vote10 || 0; /* cite: 28 */
+
+        voteCounts[index]++; /* cite: 29 */
+        voteCount++; /* cite: 29 */
+
+        // MODIFICATION START: Increment and store individual user votes
+        userIndividualVotes[index]++;
+        localStorage.setItem(`userVotes_contestant_${index}`, userIndividualVotes[index]);
+        updateIndividualVoteDisplay(index); // Update the specific contestant's vote count display
+        // MODIFICATION END
+
+        localStorage.setItem("voteCount", voteCount); /* cite: 29 */
+
+        db.ref("votes").set({ /* cite: 30 */
+            vote1: voteCounts[0], /* cite: 30 */
+            vote2: voteCounts[1], /* cite: 30 */
+            vote3: voteCounts[2], /* cite: 30 */
+            vote4: voteCounts[3], /* cite: 30 */
+            vote5: voteCounts[4], /* cite: 30 */
+            vote6: voteCounts[5], /* cite: 30 */
+            vote7: voteCounts[6], /* cite: 30 */
+            vote8: voteCounts[7], /* cite: 30 */
+            vote9: voteCounts[8],/* cite: 30 */
+            vote10:voteCounts[9] /* cite: 30 */
+
+
+        }).then(() => {
+            updateUI(); /* cite: 30 */
+            updateVoteStatus(); /* cite: 30 */
+        });
+    });
+}
+
+fetchVotes(); /* cite: 30 */
+updateVoteStatus(); /* cite: 30 */
+// MODIFICATION START: Call the function to initialize individual vote displays on load
+initializeIndividualVotes();
+// MODIFICATION END
+</script>
+</body>
+</html>
