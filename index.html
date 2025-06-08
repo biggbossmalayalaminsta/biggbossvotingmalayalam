@@ -302,188 +302,192 @@ This is a fan-made voting simulation. This is not an official affiliation with B
 </div>
 
 <script>
-const firebaseConfig = {
-apiKey: "AIzaSyCWs_SbP-PhVXwEZQdOIk_ViupZBviHUk0", /* cite: 17 */
-authDomain: "biggboss-voting-malayalam.firebaseapp.com", /* cite: 17 */
-databaseURL: "https://biggboss-voting-malayalam-default-rtdb.firebaseio.com", /* cite: 17 */
-projectId: "biggboss-voting-malayalam", /* cite: 17 */
-storageBucket: "biggboss-voting-malayalam.firebasestorage.app", /* cite: 17 */
-messagingSenderId: "912043278492", /* cite: 17 */
-appId: "1:912043278492:web:b71817eb68bc7733852d59" /* cite: 17 */
-};
-firebase.initializeApp(firebaseConfig); /* cite: 17 */
-const db = firebase.database(); /* cite: 17 */
+    const firebaseConfig = {
+        apiKey: "AIzaSyCWs_SbP-PhVXwEZQdOIk_ViupZBviHUk0", /* cite: 17 */
+        authDomain: "biggboss-voting-malayalam.firebaseapp.com", /* cite: 17 */
+        databaseURL: "https://biggboss-voting-malayalam-default-rtdb.firebaseio.com", /* cite: 17 */
+        projectId: "biggboss-voting-malayalam", /* cite: 17 */
+        storageBucket: "biggboss-voting-malayalam.firebasestorage.app", /* cite: 17 */
+        messagingSenderId: "912043278492", /* cite: 17 */
+        appId: "1:912043278492:web:b71817eb68bc7733852d59" /* cite: 17 */
+    };
+    firebase.initializeApp(firebaseConfig); /* cite: 17 */
+    const db = firebase.database(); /* cite: 17 */
 
-const voteCounts = [0,0,0,0,0,0,0,0,0,0]; /* cite: 17 */
-let voteCount = parseInt(localStorage.getItem("voteCount")) || 0; /* cite: 18 */
-let voteStartTime = parseInt(localStorage.getItem("voteStartTime")) || 0; /* cite: 18 */
-const voteLimit = 50; // updated vote limit to 50
-const voteWindow = 24 * 60 * 60 * 1000; // 24 hours (unchanged, but daily reset logic is new) /* cite: 19 */
+    const voteCounts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; /* cite: 17 */
+    let voteCount = parseInt(localStorage.getItem("voteCount")) || 0; /* cite: 18 */
+    let voteStartTime = parseInt(localStorage.getItem("voteStartTime")) || 0; /* cite: 18 */
+    const voteLimit = 50;
+    const voteWindow = 24 * 60 * 60 * 1000; // 24 hours
 
-// MODIFICATION START: New array to store individual user votes for each contestant
-let userIndividualVotes = new Array(voteCounts.length).fill(0);
+    let userIndividualVotes = new Array(voteCounts.length).fill(0);
 
-function getMidnightTimestamp() {
-    const now = new Date();
-    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
-    return midnight.getTime();
-}
-
-function updateVoteStatus() {
-    const remaining = Math.max(0, voteLimit - voteCount);
-    const statusText = `${remaining} vote${remaining === 1 ? '' : 's'} left today`;
-    const statusEl = document.getElementById("voteStatus");
-    if (statusEl) {
-        statusEl.innerText = statusText;
+    function getMidnightTimestamp() {
+        const now = new Date();
+        // Set to next midnight (00:00:00 of the next day)
+        const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
+        return midnight.getTime();
     }
-}
 
-// MODIFICATION START: Function to initialize and update individual user vote displays
-function initializeIndividualVotes() {
-    for (let i = 0; i < userIndividualVotes.length; i++) {
-        const storedUserVotes = localStorage.getItem(`userVotes_contestant_${i}`);
-        if (storedUserVotes) {
-            userIndividualVotes[i] = parseInt(storedUserVotes);
-        } else {
-            userIndividualVotes[i] = 0;
+    function updateVoteStatus() {
+        const remaining = Math.max(0, voteLimit - voteCount);
+        const statusText = `${remaining} vote${remaining === 1 ? '' : 's'} left today`;
+        const statusEl = document.getElementById("voteStatus");
+        if (statusEl) {
+            statusEl.innerText = statusText;
         }
-        updateIndividualVoteDisplay(i);
     }
-}
 
-function updateIndividualVoteDisplay(index) {
-    const displayElement = document.getElementById(`user-votes-${index}`);
-    if (displayElement) {
-        displayElement.textContent = userIndividualVotes[index];
-    }
-}
-// MODIFICATION END
-
-
-function updateUI() {
-    const total = voteCounts.reduce((a,b)=>a+b,0); /* cite: 21 */
-    voteCounts.forEach((count, i) => {
-        const percent = total ? Math.round((count / total) * 100) : 0; /* cite: 21 */
-        document.getElementById("bar" + (i + 1)).style.width = percent + "%"; /* cite: 21 */
-        document.getElementById("percent" + (i + 1)).innerText = percent + "%"; /* cite: 21 */
-    });
-}
-
-function fetchVotes() {
-    db.ref("votes").on("value", (snapshot) => { /* cite: 22 */
-        const data = snapshot.val(); /* cite: 22 */
-        if (data) { /* cite: 22 */
-            voteCounts[0] = data.vote1 || 0; /* cite: 22 */
-            voteCounts[1] = data.vote2 || 0; /* cite: 22 */
-            voteCounts[2] = data.vote3 || 0; /* cite: 23 */
-            voteCounts[3] = data.vote4 || 0; /* cite: 23 */
-            voteCounts[4] = data.vote5 || 0; /* cite: 23 */
-            voteCounts[5] = data.vote6 || 0; /* cite: 23 */
-            voteCounts[6] = data.vote7 || 0; /* cite: 23 */
-            voteCounts[7] = data.vote8 || 0; /* cite: 23 */
-            voteCounts[8] = data.vote9 || 0; /* cite: 23 */
-            voteCounts[9] = data.vote10 || 0; /* cite: 23 */
-        }
-        updateUI(); /* cite: 24 */
-    });
-}
-
-// Functions for the custom modal
-function showModal(title, message) {
-    document.getElementById("modalTitle").innerText = title;
-    document.getElementById("modalMessage").innerText = message;
-    document.getElementById("myModal").style.display = "flex";
-}
-
-function closeModal() {
-    document.getElementById("myModal").style.display = "none";
-}
-
-function vote(index) {
-    const now = Date.now();
-    const nextMidnight = getMidnightTimestamp();
-
-    // Check if a new day has started or if it's the very first vote
-    if (voteStartTime === 0 || now >= nextMidnight) {
-        voteCount = 0; // Reset total vote count
-        voteStartTime = now; // Set new start time
-        localStorage.setItem("voteStartTime", voteStartTime);
-        localStorage.setItem("voteCount", voteCount);
-        // MODIFICATION START: Reset individual user votes as well
-        userIndividualVotes.fill(0);
+    function initializeIndividualVotes() {
         for (let i = 0; i < userIndividualVotes.length; i++) {
-            localStorage.setItem(`userVotes_contestant_${i}`, 0);
-            updateIndividualVoteDisplay(i); // Update display after reset
+            const storedUserVotes = localStorage.getItem(`userVotes_contestant_${i}`);
+            if (storedUserVotes) {
+                userIndividualVotes[i] = parseInt(storedUserVotes);
+            } else {
+                userIndividualVotes[i] = 0;
+            }
+            updateIndividualVoteDisplay(i);
         }
-        // MODIFICATION END
     }
 
-    if (voteCount >= voteLimit) {
-    // Show modal saying limit reached
-    const timeLeft = nextMidnight - now;
-    const hrs = Math.floor(timeLeft / (1000 * 60 * 60));
-    const mins = Math.ceil((timeLeft % (1000 * 60 * 60)) / 60000);
-    let timeMessage = "";
-    if (hrs > 0) {
-        timeMessage += `${hrs} hour${hrs === 1 ? '' : 's'} `;
+    function updateIndividualVoteDisplay(index) {
+        const displayElement = document.getElementById(`user-votes-${index}`);
+        if (displayElement) {
+            displayElement.textContent = userIndividualVotes[index];
+        }
     }
-    timeMessage += `${mins} minute${mins === 1 ? '' : 's'}`;
 
-    showModal("Vote Limit Reached!", `Today's voting limit reached. Come back after ${timeMessage}. Thanks for Voting.`);
-    return;
-}
-
-    
-
-    db.ref("votes").once("value").then((snapshot) => { /* cite: 27 */
-        const data = snapshot.val() || {}; /* cite: 27 */
-        voteCounts[0] = data.vote1 || 0; /* cite: 27 */
-        voteCounts[1] = data.vote2 || 0; /* cite: 27 */
-        voteCounts[2] = data.vote3 || 0; /* cite: 28 */
-        voteCounts[3] = data.vote4 || 0; /* cite: 28 */
-        voteCounts[4] = data.vote5 || 0; /* cite: 28 */
-        voteCounts[5] = data.vote6 || 0; /* cite: 28 */
-        voteCounts[6] = data.vote7 || 0; /* cite: 28 */
-        voteCounts[7] = data.vote8 || 0; /* cite: 28 */
-        voteCounts[8] = data.vote9 || 0; /* cite: 28 */
-        voteCounts[9] = data.vote10 || 0; /* cite: 28 */
-
-        voteCounts[index]++; /* cite: 29 */
-        voteCount++; /* cite: 29 */
-
-        // MODIFICATION START: Increment and store individual user votes
-        userIndividualVotes[index]++;
-        localStorage.setItem(`userVotes_contestant_${index}`, userIndividualVotes[index]);
-        updateIndividualVoteDisplay(index); // Update the specific contestant's vote count display
-        // MODIFICATION END
-
-        localStorage.setItem("voteCount", voteCount); /* cite: 29 */
-
-        db.ref("votes").set({ /* cite: 30 */
-            vote1: voteCounts[0], /* cite: 30 */
-            vote2: voteCounts[1], /* cite: 30 */
-            vote3: voteCounts[2], /* cite: 30 */
-            vote4: voteCounts[3], /* cite: 30 */
-            vote5: voteCounts[4], /* cite: 30 */
-            vote6: voteCounts[5], /* cite: 30 */
-            vote7: voteCounts[6], /* cite: 30 */
-            vote8: voteCounts[7], /* cite: 30 */
-            vote9: voteCounts[8],/* cite: 30 */
-            vote10:voteCounts[9] /* cite: 30 */
-
-
-        }).then(() => {
-            updateUI(); /* cite: 30 */
-            updateVoteStatus(); /* cite: 30 */
+    function updateUI() {
+        const total = voteCounts.reduce((a, b) => a + b, 0);
+        voteCounts.forEach((count, i) => {
+            const percent = total ? Math.round((count / total) * 100) : 0;
+            document.getElementById("bar" + (i + 1)).style.width = percent + "%";
+            document.getElementById("percent" + (i + 1)).innerText = percent + "%";
         });
-    });
-}
+    }
 
-fetchVotes(); /* cite: 30 */
-updateVoteStatus(); /* cite: 30 */
-// MODIFICATION START: Call the function to initialize individual vote displays on load
-initializeIndividualVotes();
-// MODIFICATION END
+    function fetchVotes() {
+        db.ref("votes").on("value", (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                voteCounts[0] = data.vote1 || 0;
+                voteCounts[1] = data.vote2 || 0;
+                voteCounts[2] = data.vote3 || 0;
+                voteCounts[3] = data.vote4 || 0;
+                voteCounts[4] = data.vote5 || 0;
+                voteCounts[5] = data.vote6 || 0;
+                voteCounts[6] = data.vote7 || 0;
+                voteCounts[7] = data.vote8 || 0;
+                voteCounts[8] = data.vote9 || 0;
+                voteCounts[9] = data.vote10 || 0;
+            }
+            updateUI();
+        });
+    }
+
+    // Functions for the custom modal
+    function showModal(title, message) {
+        document.getElementById("modalTitle").innerText = title;
+        document.getElementById("modalMessage").innerText = message;
+        document.getElementById("myModal").style.display = "flex";
+    }
+
+    function closeModal() {
+        document.getElementById("myModal").style.display = "none";
+    }
+
+    // New function to check and reset daily votes on page load
+    function checkAndResetDailyVotes() {
+        const now = Date.now();
+        const nextMidnight = getMidnightTimestamp();
+
+        // If voteStartTime is 0 (first visit) or it's past midnight since the last voteStartTime
+        if (voteStartTime === 0 || now >= nextMidnight) {
+            console.log("Resetting daily votes..."); // For debugging
+            voteCount = 0; // Reset total vote count
+            // Set voteStartTime to midnight of the *current* day if it's past midnight
+            // or to now if it's the very first time.
+            const todayMidnight = new Date(now).setHours(0,0,0,0);
+            voteStartTime = Math.max(voteStartTime, todayMidnight); // Ensure voteStartTime is not in the future for daily reset
+            localStorage.setItem("voteStartTime", voteStartTime);
+            localStorage.setItem("voteCount", voteCount);
+
+            userIndividualVotes.fill(0);
+            for (let i = 0; i < userIndividualVotes.length; i++) {
+                localStorage.setItem(`userVotes_contestant_${i}`, 0);
+                updateIndividualVoteDisplay(i);
+            }
+            updateVoteStatus(); // Update status immediately after reset
+        }
+    }
+
+
+    function vote(index) {
+        // Call checkAndResetDailyVotes here too as a robust fallback.
+        checkAndResetDailyVotes();
+
+        if (voteCount >= voteLimit) {
+            const now = Date.now();
+            const nextMidnight = getMidnightTimestamp();
+            const timeLeft = nextMidnight - now;
+            const hrs = Math.floor(timeLeft / (1000 * 60 * 60));
+            const mins = Math.ceil((timeLeft % (1000 * 60 * 60)) / 60000);
+            let timeMessage = "";
+            if (hrs > 0) {
+                timeMessage += `${hrs} hour${hrs === 1 ? '' : 's'} `;
+            }
+            timeMessage += `${mins} minute${mins === 1 ? '' : 's'}`;
+
+            showModal("Vote Limit Reached!", `Today's voting limit reached. Come back after ${timeMessage}. Thanks for Voting.`);
+            return;
+        }
+
+        db.ref("votes").once("value").then((snapshot) => {
+            const data = snapshot.val() || {};
+            voteCounts[0] = data.vote1 || 0;
+            voteCounts[1] = data.vote2 || 0;
+            voteCounts[2] = data.vote3 || 0;
+            voteCounts[3] = data.vote4 || 0;
+            voteCounts[4] = data.vote5 || 0;
+            voteCounts[5] = data.vote6 || 0;
+            voteCounts[6] = data.vote7 || 0;
+            voteCounts[7] = data.vote8 || 0;
+            voteCounts[8] = data.vote9 || 0;
+            voteCounts[9] = data.vote10 || 0;
+
+            voteCounts[index]++;
+            voteCount++;
+
+            userIndividualVotes[index]++;
+            localStorage.setItem(`userVotes_contestant_${index}`, userIndividualVotes[index]);
+            updateIndividualVoteDisplay(index);
+
+            localStorage.setItem("voteCount", voteCount);
+
+            db.ref("votes").set({
+                vote1: voteCounts[0],
+                vote2: voteCounts[1],
+                vote3: voteCounts[2],
+                vote4: voteCounts[3],
+                vote5: voteCounts[4],
+                vote6: voteCounts[5],
+                vote7: voteCounts[6],
+                vote8: voteCounts[7],
+                vote9: voteCounts[8],
+                vote10: voteCounts[9]
+            }).then(() => {
+                updateUI();
+                updateVoteStatus();
+            });
+        });
+    }
+
+    // Call checkAndResetDailyVotes right before fetching votes and updating status
+    // to ensure it runs on page load and correctly resets before anything else.
+    checkAndResetDailyVotes();
+    fetchVotes();
+    updateVoteStatus();
+    initializeIndividualVotes();
 </script>
 </body>
 </html>
