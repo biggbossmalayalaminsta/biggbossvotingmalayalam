@@ -166,6 +166,47 @@ font-size: 12px; /* cite: 12 */
     margin-top: 20px;
     font-size: 16px;
 }
+
+/* Styles for the Scroll Prompt Pop-up */
+.scroll-prompt-content {
+    background-color: #2a2a2a; /* Slightly different background for distinction */
+    max-width: 300px; /* Make it a bit smaller than the alert modal */
+    padding-bottom: 20px; /* Adjust padding if needed */
+    cursor: pointer; /* Indicate it's clickable */
+}
+
+.scroll-prompt-content h4 {
+    color: #a94eff;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.scroll-prompt-content p {
+    font-size: 16px;
+    color: #e0e0e0;
+    margin-bottom: 15px;
+}
+
+.scroll-arrow-container {
+    padding-top: 10px; /* Space above the arrow */
+}
+
+.scroll-down-arrow {
+    width: 50px;
+    height: 50px;
+    color: #a94eff; /* Purple color for the arrow */
+    animation: bounce 1s infinite alternate; /* Apply bounce animation */
+}
+
+/* Keyframe animation for the bouncing arrow */
+@keyframes bounce {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(15px); /* Move down 15px */
+    }
+}
 </style>
 </head>
 <body>
@@ -301,6 +342,17 @@ This is a fan-made voting simulation. This is not an official affiliation with B
     </div>
 </div>
 
+<div id="scrollPromptModal" class="modal-overlay">
+    <div class="modal-content scroll-prompt-content">
+        <h4>Scroll Down to Vote!</h4>
+        <p>The voting section is just below. 👇</p>
+        <div class="scroll-arrow-container">
+            <svg class="scroll-down-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 21l-7-7h4V3h6v11h4z"/>
+            </svg>
+        </div>
+    </div>
+</div>
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyCWs_SbP-PhVXwEZQdOIk_ViupZBviHUk0", /* cite: 17 */
@@ -308,8 +360,8 @@ This is a fan-made voting simulation. This is not an official affiliation with B
         databaseURL: "https://biggboss-voting-malayalam-default-rtdb.firebaseio.com", /* cite: 17 */
         projectId: "biggboss-voting-malayalam", /* cite: 17 */
         storageBucket: "biggboss-voting-malayalam.firebasestorage.app", /* cite: 17 */
-        messagingSenderId: "912043278492", /* cite: 17 */
-        appId: "1:912043278492:web:b71817eb68bc7733852d59" /* cite: 17 */
+        messagingSenderId: "1:912043278492:web:b71817eb68bc7733852d59", /* cite: 17 */
+        appId: "" /* cite: 17 */
     };
     firebase.initializeApp(firebaseConfig); /* cite: 17 */
     const db = firebase.database(); /* cite: 17 */
@@ -394,6 +446,31 @@ This is a fan-made voting simulation. This is not an official affiliation with B
 
     function closeModal() {
         document.getElementById("myModal").style.display = "none";
+    }
+
+    // Function to show the scroll prompt modal
+    function showScrollPrompt() {
+        const scrollModal = document.getElementById("scrollPromptModal");
+        scrollModal.style.display = "flex"; // Show the modal
+
+        // Hide the modal after 5 seconds (adjust as needed)
+        setTimeout(() => {
+            scrollModal.style.display = "none";
+        }, 4000); // 4000 milliseconds = 4 seconds
+
+        // Smooth scroll to voting section on click
+        scrollModal.onclick = () => {
+            const voteBox = document.querySelector(".vote-box");
+            if (voteBox) {
+                voteBox.scrollIntoView({ behavior: 'smooth' });
+            }
+            closeScrollPrompt(); // Hide the modal after scrolling
+        };
+    }
+
+    // Function to close the scroll prompt modal directly
+    function closeScrollPrompt() {
+        document.getElementById("scrollPromptModal").style.display = "none";
     }
 
     // New function to check and reset daily votes on page load
@@ -482,6 +559,8 @@ This is a fan-made voting simulation. This is not an official affiliation with B
         });
     }
 
+    // Call showScrollPrompt when the page loads
+    window.onload = showScrollPrompt;
     // Call checkAndResetDailyVotes right before fetching votes and updating status
     // to ensure it runs on page load and correctly resets before anything else.
     checkAndResetDailyVotes();
