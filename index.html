@@ -10,7 +10,7 @@
 body {
 margin: 0;
 font-family: 'Poppins', sans-serif;
-background-color: #0d0d0d; /* cite: 2 */
+background-color: #0d0d0d;
 color: white;
 }
 .top-bar, .bottom-bar {
@@ -21,116 +21,113 @@ background: #1a1a1a;
 padding: 10px 20px;
 }
 .top-bar img, .bottom-card img {
-width: 70px; /* cite: 3 */
-height: 70px; /* cite: 3 */
-object-fit: cover;; /* cite: 3 */
+width: 70px;
+height: 70px;
+object-fit: cover;
 }
 .top-bar div, .bottom-card {
 text-align: center;
 font-size: 12px;
 }
-.center-logo { height: 60px; object-fit: contain; } /* cite: 4 */
+.center-logo { height: 60px; object-fit: contain; }
 h1, h2 { text-align: center; margin: 10px 0; }
-h1 { font-size: 24px; /* cite: 5 */ }
-h2 { font-size: 18px; color: #a94eff; } /* cite: 5 */
-.progress-section { padding: 10px 20px; } /* cite: 5 */
+h1 { font-size: 24px; }
+h2 { font-size: 18px; color: #a94eff; }
+.progress-section { padding: 10px 20px; }
 .progress-row {
 display: flex;
 align-items: center;
 margin-bottom: 20px;
 }
 .progress-row img {
-width: 50px; /* cite: 6 */
-height: 50px; /* cite: 6 */
-border-radius: 50%; /* cite: 6 */
-border: 3px solid #a94eff; /* cite: 6 */
-margin-right: 10px; /* cite: 6 */
+width: 50px;
+height: 50px;
+border-radius: 50%;
+border: 3px solid #a94eff;
+margin-right: 10px;
 }
 .progress-bar-container {
-flex: 1; /* cite: 7 */
-background: #2a2a2a; /* cite: 7 */
-border-radius: 10px; /* cite: 7 */
-overflow: hidden; /* cite: 7 */
-height: 20px; /* cite: 7 */
+flex: 1;
+background: #2a2a2a;
+border-radius: 10px;
+overflow: hidden;
+height: 20px;
 }
 .progress-fill {
-height: 100%; /* cite: 7 */
-background: linear-gradient(to right, #a94eff, #5c00b3); /* cite: 7 */
-width: 0%; /* cite: 7 */
-border-radius: 10px; /* cite: 8 */
-transition: width 0.3s; /* cite: 8 */
+height: 100%;
+background: linear-gradient(to right, #a94eff, #5c00b3);
+width: 0%;
+border-radius: 10px;
+transition: width 0.3s;
 }
-.percent { margin-left: 10px; } /* cite: 8 */
+.percent { margin-left: 10px; }
 .vote-box {
-background: #1e1e1e; /* cite: 8 */
-border-radius: 20px; /* cite: 8 */
-padding: 20px; /* cite: 8 */
-margin: 30px 20px; /* cite: 8 */
-text-align: center; /* cite: 9 */
+background: #1e1e1e;
+border-radius: 20px;
+padding: 20px;
+margin: 30px 20px;
+text-align: center;
 }
 .vote-options {
-display: flex; /* cite: 9 */
-justify-content: space-around; /* cite: 9 */
-flex-wrap: wrap; /* cite: 9 */
-gap: 10px; /* cite: 9 */
+display: flex;
+justify-content: space-around;
+flex-wrap: wrap;
+gap: 10px;
 }
 .vote-card {
-display: flex; /* cite: 9 */
-flex-direction: column; /* cite: 9 */
-align-items: center; /* cite: 9 */
+display: flex;
+flex-direction: column;
+align-items: center;
 }
 .vote-card img {
-width: 60px; /* cite: 10 */
-height: 60px; /* cite: 10 */
-border-radius: 50%; /* cite: 10 */
-border: 3px solid #a94eff; /* cite: 10 */
+width: 60px;
+height: 60px;
+border-radius: 50%;
+border: 3px solid #a94eff;
 }
 .vote-card button {
-margin-top: 5px; /* cite: 10 */
-background: linear-gradient(to right, #a94eff, #5c00b3); /* cite: 11 */
-border: none; /* cite: 11 */
-padding: 5px 15px; /* cite: 11 */
-color: white; /* cite: 11 */
-border-radius: 10px; /* cite: 11 */
-font-weight: bold; /* cite: 11 */
-cursor: pointer; /* cite: 11 */
+margin-top: 5px;
+background: linear-gradient(to right, #a94eff, #5c00b3);
+border: none;
+padding: 5px 15px;
+color: white;
+border-radius: 10px;
+font-weight: bold;
+cursor: pointer;
 }
-/* ADDED: Style for individual vote count display */
 .your-votes-display {
-    font-size: 11px; /* Smaller font size for clarity */
+    font-size: 11px;
     color: #bbb;
-    margin-top: 5px; /* Space from the button */
+    margin-top: 5px;
 }
 .your-votes-count {
     font-weight: bold;
-    color: #a94eff; /* Highlighted color */
+    color: #a94eff;
 }
-
-
 .follow-btn {
-background: #3399ff; /* cite: 12 */
-color: white; /* cite: 12 */
-padding: 5px 15px; /* cite: 12 */
-border-radius: 8px; /* cite: 12 */
-font-weight: bold; /* cite: 12 */
-border: none; /* cite: 12 */
+background: #3399ff;
+color: white;
+padding: 5px 15px;
+border-radius: 8px;
+font-weight: bold;
+border: none;
 }
 .bottom-card p{
-margin: 5px 0; /* cite: 12 */
-font-size: 12px; /* cite: 12 */
+margin: 5px 0;
+font-size: 12px;
 }
 
 /* Custom Modal Styles */
 .modal-overlay {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1000; /* Sit on top */
+    display: none;
+    position: fixed;
+    z-index: 1000;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.7);
     align-items: center;
     justify-content: center;
 }
@@ -140,7 +137,7 @@ font-size: 12px; /* cite: 12 */
     margin: auto;
     padding: 30px;
     border-radius: 15px;
-    width: 80%; /* Could be responsive */
+    width: 80%;
     max-width: 400px;
     text-align: center;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
@@ -169,10 +166,10 @@ font-size: 12px; /* cite: 12 */
 
 /* Styles for the Scroll Prompt Pop-up */
 .scroll-prompt-content {
-    background-color: #2a2a2a; /* Slightly different background for distinction */
-    max-width: 300px; /* Make it a bit smaller than the alert modal */
-    padding-bottom: 20px; /* Adjust padding if needed */
-    cursor: pointer; /* Indicate it's clickable */
+    background-color: #2a2a2a;
+    max-width: 300px;
+    padding-bottom: 20px;
+    cursor: pointer;
 }
 
 .scroll-prompt-content h4 {
@@ -188,14 +185,14 @@ font-size: 12px; /* cite: 12 */
 }
 
 .scroll-arrow-container {
-    padding-top: 10px; /* Space above the arrow */
+    padding-top: 10px;
 }
 
 .scroll-down-arrow {
     width: 50px;
     height: 50px;
-    color: #a94eff; /* Purple color for the arrow */
-    animation: bounce 1s infinite alternate; /* Apply bounce animation */
+    color: #a94eff;
+    animation: bounce 1s infinite alternate;
 }
 
 /* Keyframe animation for the bouncing arrow */
@@ -204,7 +201,7 @@ font-size: 12px; /* cite: 12 */
         transform: translateY(0);
     }
     to {
-        transform: translateY(15px); /* Move down 15px */
+        transform: translateY(15px);
     }
 }
 </style>
@@ -355,34 +352,41 @@ This is a fan-made voting simulation. This is not an official affiliation with B
 </div>
 <script>
     const firebaseConfig = {
-        apiKey: "AIzaSyCWs_SbP-PhVXwEZQdOIk_ViupZBviHUk0", /* cite: 17 */
-        authDomain: "biggboss-voting-malayalam.firebaseapp.com", /* cite: 17 */
-        databaseURL: "https://biggboss-voting-malayalam-default-rtdb.firebaseio.com", /* cite: 17 */
-        projectId: "biggboss-voting-malayalam", /* cite: 17 */
-        storageBucket: "biggboss-voting-malayalam.firebasestorage.app", /* cite: 17 */
-        messagingSenderId: "1:912043278492:web:b71817eb68bc7733852d59", /* cite: 17 */
-        appId: "" /* cite: 17 */
+        apiKey: "AIzaSyCWs_SbP-PhVXwEZQdOIk_ViupZBviHUk0", /* Replace with your Firebase API Key */
+        authDomain: "biggboss-voting-malayalam.firebaseapp.com", /* Replace with your Firebase Auth Domain */
+        databaseURL: "https://biggboss-voting-malayalam-default-rtdb.firebaseio.com", /* Replace with your Firebase Database URL */
+        projectId: "biggboss-voting-malayalam", /* Replace with your Firebase Project ID */
+        storageBucket: "biggboss-voting-malayalam.firebasestorage.app", /* Replace with your Firebase Storage Bucket */
+        messagingSenderId: "912043278492", /* Replace with your Firebase Messaging Sender ID */
+        appId: "1:912043278492:web:b71817eb68bc7733852d59" /* Replace with your Firebase App ID */
     };
-    firebase.initializeApp(firebaseConfig); /* cite: 17 */
-    const db = firebase.database(); /* cite: 17 */
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-    const voteCounts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; /* cite: 17 */
-    let voteCount = parseInt(localStorage.getItem("voteCount")) || 0; /* cite: 18 */
-    let voteStartTime = parseInt(localStorage.getItem("voteStartTime")) || 0; /* cite: 18 */
+    const voteCounts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // Renamed voteCount to dailyVoteCount for clarity as it resets daily
+    let dailyVoteCount = parseInt(localStorage.getItem("dailyVoteCount")) || 0;
+    // Renamed voteStartTime to lastResetDay to clearly indicate its purpose
+    let lastResetDay = parseInt(localStorage.getItem("lastResetDay")) || 0;
     const voteLimit = 50;
-    const voteWindow = 24 * 60 * 60 * 1000; // 24 hours
 
     let userIndividualVotes = new Array(voteCounts.length).fill(0);
 
+    // This function calculates the next midnight for displaying time remaining, not for reset logic
     function getMidnightTimestamp() {
         const now = new Date();
-        // Set to next midnight (00:00:00 of the next day)
         const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
         return midnight.getTime();
     }
 
+    // This function calculates the timestamp for the beginning of the current day
+    function getTodayStartTimestamp() {
+        const now = new Date();
+        return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0).getTime();
+    }
+
     function updateVoteStatus() {
-        const remaining = Math.max(0, voteLimit - voteCount);
+        const remaining = Math.max(0, voteLimit - dailyVoteCount);
         const statusText = `${remaining} vote${remaining === 1 ? '' : 's'} left today`;
         const statusEl = document.getElementById("voteStatus");
         if (statusEl) {
@@ -451,21 +455,22 @@ This is a fan-made voting simulation. This is not an official affiliation with B
     // Function to show the scroll prompt modal
     function showScrollPrompt() {
         const scrollModal = document.getElementById("scrollPromptModal");
-        scrollModal.style.display = "flex"; // Show the modal
+        // Only show if the user hasn't scrolled yet (check if they are at the top)
+        if (window.scrollY === 0) {
+            scrollModal.style.display = "flex";
 
-        // Hide the modal after 5 seconds (adjust as needed)
-        setTimeout(() => {
-            scrollModal.style.display = "none";
-        }, 4000); // 4000 milliseconds = 4 seconds
+            setTimeout(() => {
+                scrollModal.style.display = "none";
+            }, 5000); // Hide after 5 seconds
 
-        // Smooth scroll to voting section on click
-        scrollModal.onclick = () => {
-            const voteBox = document.querySelector(".vote-box");
-            if (voteBox) {
-                voteBox.scrollIntoView({ behavior: 'smooth' });
-            }
-            closeScrollPrompt(); // Hide the modal after scrolling
-        };
+            scrollModal.onclick = () => {
+                const voteBox = document.querySelector(".vote-box");
+                if (voteBox) {
+                    voteBox.scrollIntoView({ behavior: 'smooth' });
+                }
+                closeScrollPrompt();
+            };
+        }
     }
 
     // Function to close the scroll prompt modal directly
@@ -473,39 +478,42 @@ This is a fan-made voting simulation. This is not an official affiliation with B
         document.getElementById("scrollPromptModal").style.display = "none";
     }
 
-    // New function to check and reset daily votes on page load
+    // Core logic for daily vote reset
     function checkAndResetDailyVotes() {
-        const now = Date.now();
-        const nextMidnight = getMidnightTimestamp();
+        const todayStart = getTodayStartTimestamp(); // Midnight of the current day
+        const storedLastResetDay = parseInt(localStorage.getItem("lastResetDay")) || 0;
 
-        // If voteStartTime is 0 (first visit) or it's past midnight since the last voteStartTime
-        if (voteStartTime === 0 || now >= nextMidnight) {
-            console.log("Resetting daily votes..."); // For debugging
-            voteCount = 0; // Reset total vote count
-            // Set voteStartTime to midnight of the *current* day if it's past midnight
-            // or to now if it's the very first time.
-            const todayMidnight = new Date(now).setHours(0,0,0,0);
-            voteStartTime = Math.max(voteStartTime, todayMidnight); // Ensure voteStartTime is not in the future for daily reset
-            localStorage.setItem("voteStartTime", voteStartTime);
-            localStorage.setItem("voteCount", voteCount);
+        // If it's the very first visit (storedLastResetDay is 0)
+        // OR if the current day's start is later than the stored last reset day
+        // (meaning a new day has begun since the last reset)
+        if (storedLastResetDay === 0 || todayStart > storedLastResetDay) {
+            console.log("Resetting daily votes...");
+            dailyVoteCount = 0; // Reset total daily vote count
+            localStorage.setItem("dailyVoteCount", dailyVoteCount);
 
+            // Reset individual vote counts
             userIndividualVotes.fill(0);
             for (let i = 0; i < userIndividualVotes.length; i++) {
                 localStorage.setItem(`userVotes_contestant_${i}`, 0);
-                updateIndividualVoteDisplay(i);
+                updateIndividualVoteDisplay(i); // Update UI for individual votes
             }
-            updateVoteStatus(); // Update status immediately after reset
+
+            // Update the last reset day to the start of the current day
+            lastResetDay = todayStart;
+            localStorage.setItem("lastResetDay", lastResetDay);
+
+            updateVoteStatus(); // Update the vote status message
         }
     }
 
-
     function vote(index) {
-        // Call checkAndResetDailyVotes here too as a robust fallback.
+        // Always call checkAndResetDailyVotes before processing a vote
+        // This ensures the reset happens on the first interaction of a new day
         checkAndResetDailyVotes();
 
-        if (voteCount >= voteLimit) {
+        if (dailyVoteCount >= voteLimit) {
             const now = Date.now();
-            const nextMidnight = getMidnightTimestamp();
+            const nextMidnight = getMidnightTimestamp(); // Use this for display only
             const timeLeft = nextMidnight - now;
             const hrs = Math.floor(timeLeft / (1000 * 60 * 60));
             const mins = Math.ceil((timeLeft % (1000 * 60 * 60)) / 60000);
@@ -533,13 +541,13 @@ This is a fan-made voting simulation. This is not an official affiliation with B
             voteCounts[9] = data.vote10 || 0;
 
             voteCounts[index]++;
-            voteCount++;
+            dailyVoteCount++; // Increment the daily vote counter
 
             userIndividualVotes[index]++;
             localStorage.setItem(`userVotes_contestant_${index}`, userIndividualVotes[index]);
             updateIndividualVoteDisplay(index);
 
-            localStorage.setItem("voteCount", voteCount);
+            localStorage.setItem("dailyVoteCount", dailyVoteCount); // Save updated daily vote count
 
             db.ref("votes").set({
                 vote1: voteCounts[0],
@@ -554,19 +562,19 @@ This is a fan-made voting simulation. This is not an official affiliation with B
                 vote10: voteCounts[9]
             }).then(() => {
                 updateUI();
-                updateVoteStatus();
+                updateVoteStatus(); // Update status after successful vote
             });
         });
     }
 
+    // Call checkAndResetDailyVotes on page load to handle resets for the current day
+    checkAndResetDailyVotes();
+    fetchVotes(); // Fetch votes from Firebase after potential reset
+    updateVoteStatus(); // Update vote status based on current dailyVoteCount
+    initializeIndividualVotes(); // Load and display individual votes
+
     // Call showScrollPrompt when the page loads
     window.onload = showScrollPrompt;
-    // Call checkAndResetDailyVotes right before fetching votes and updating status
-    // to ensure it runs on page load and correctly resets before anything else.
-    checkAndResetDailyVotes();
-    fetchVotes();
-    updateVoteStatus();
-    initializeIndividualVotes();
 </script>
 </body>
 </html>
