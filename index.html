@@ -239,9 +239,6 @@ class="percent" id="percent7">0%</div></div>
 <div class="progress-row"><img src="contestant8.png"><div
 class="progress-bar-container"><div class="progress-fill" id="bar8"></div></div><div
 class="percent" id="percent8">0%</div></div>
-<div class="progress-row"><img src="user9.png"><div
-class="progress-bar-container"><div class="progress-fill" id="bar9"></div></div><div
-class="percent" id="percent9">0%</div></div>
 </div>
 <div class="vote-box">
 <h3>Vote Now</h3>
@@ -249,55 +246,55 @@ class="percent" id="percent9">0%</div></div>
 <div class="vote-options">
 <div class="vote-card">
     <img src="contestant1.png">
-    <p></p>
+    <p>Maya</p>
     <button onclick="vote(0)">VOTE</button>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-0">0</span></p>
 </div>
 <div class="vote-card">
     <img src="contestant2.png">
-    <p></p>
+    <p>Adithyan</p>
     <button onclick="vote(1)">VOTE</button>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-1">0</span></p>
 </div>
 <div class="vote-card">
     <img src="contestant3.png">
-    <p></p>
+    <p>Binesh</p>
     <button onclick="vote(2)">VOTE</button>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-2">0</span></p>
 </div>
 <div class="vote-card">
     <img src="contestant4.png">
-    <p></p>
+    <p>Anumol</p>
     <button onclick="vote(3)">VOTE</button>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-3">0</span></p>
 </div>
 <div class="vote-card">
     <img src="contestant5.png">
-    <p></p>
+    <p>Akshay</p>
     <button onclick="vote(4)">VOTE</button>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-4">0</span></p>
 </div>
 <div class="vote-card">
     <img src="contestant6.png">
-    <p></p>
+    <p>Sankeerth</p>
     <button onclick="vote(5)">VOTE</button>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-5">0</span></p>
 </div>
 <div class="vote-card">
     <img src="contestant7.png">
-    <p></p>
+    <p>Adharv</p>
     <button onclick="vote(6)">VOTE</button>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-6">0</span></p>
 </div>
 <div class="vote-card">
     <img src="contestant8.png">
-    <p></p>
+    <p>Athul</p>
     <button onclick="vote(7)">VOTE</button>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-7">0</span></p>
 </div>
 <div class="vote-card">
-    <img src="user9.png">
-    <p></p>
+    <img src="user7.png">
+    <p>Suriyakiran</p>
     <button onclick="vote(8)">VOTE</button>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-8">0</span></p>
 </div>
@@ -540,6 +537,8 @@ This is a fan-made voting simulation. This is not an official affiliation with B
             updateIndividualVoteDisplay(index);
 
             localStorage.setItem("dailyVoteCount", dailyVoteCount); // Save updated daily vote count
+            // Call updateVoteStatus right after incrementing dailyVoteCount and saving it
+            updateVoteStatus(); // This is the crucial line for live update
 
             db.ref("votes").set({
                 vote1: voteCounts[0],
@@ -554,7 +553,7 @@ This is a fan-made voting simulation. This is not an official affiliation with B
                 vote10: voteCounts[9]
             }).then(() => {
                 updateUI();
-                updateVoteStatus(); // Update status after successful vote
+                // updateVoteStatus() is already called above, so no need to call it here again
             });
         });
     }
