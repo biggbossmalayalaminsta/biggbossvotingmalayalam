@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>BiggBoss Voting</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+<style>
+body {
+margin: 0;
+font-family: 'Poppins', sans-serif;
+background-color: #0d0d0d;
+color: white;
+}
+.top-bar, .bottom-bar {
+display: flex;
+justify-content: space-around;
+align-items: center;
+background: #1a1a1a;
+padding: 10px 20px;
+}
+.top-bar img, .bottom-card img {
+width: 70px;
+height: 70px;
+object-fit: cover;
+}
+.top-bar div, .bottom-card {
+text-align: center;
+font-size: 12px;
+}
+.center-logo { height: 60px; object-fit: contain; }
+h1, h2 { text-align: center; margin: 10px 0; }
+h1 { font-size: 24px; }
+h2 { font-size: 18px; color: #a94eff; }
+.progress-section { padding: 10px 20px; }
+.progress-row {
+display: flex;
+align-items: center;
+margin-bottom: 20px;
+}
+.progress-row img {
+width: 50px;
+height: 50px;
+border-radius: 50%;
+border: 3px solid #a94eff;
+margin-right: 10px;
+}
+.progress-bar-container {
+flex: 1;
+background: #2a2a2a;
+border-radius: 10px;
+overflow: hidden;
+height: 20px;
+}
+.progress-fill {
+height: 100%;
+background: linear-gradient(to right, #a94eff, #5c00b3);
+width: 0%;
+border-radius: 10px;
+transition: width 0.3s;
+}
+.percent { margin-left: 10px; }
+.vote-box {
+background: #1e1e1e;
+border-radius: 20px;
+padding: 20px;
+margin: 30px 20px;
+text-align: center;
+}
+.vote-options {
+display: flex;
+justify-content: space-around;
+flex-wrap: wrap;
+gap: 10px;
+}
+.vote-card {
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+.vote-card img {
+width: 60px;
+height: 60px;
+border-radius: 50%;
+border: 3px solid #a94eff;
+}
+.vote-card button {
+margin-top: 5px;
+background: linear-gradient(to right, #a94eff, #5c00b3);
+border: none;
+padding: 5px 15px;
+color: white;
+border-radius: 10px;
+font-weight: bold;
+cursor: pointer;
+}
+.your-votes-display {
+    font-size: 11px;
+    color: #bbb;
+    margin-top: 5px;
+}
+.your-votes-count {
+    font-weight: bold;
+    color: #a94eff;
+}
+.follow-btn {
+background: #3399ff;
+color: white;
+padding: 5px 15px;
+border-radius: 8px;
+font-weight: bold;
+border: none;
+}
+.bottom-card p{
+margin: 5px 0;
+font-size: 12px;
+}
+
+/* Custom Modal Styles */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.7);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: #1a1a1a;
+    margin: auto;
+    padding: 30px;
+    border-radius: 15px;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    color: white;
+    font-size: 16px;
+}
+
+.modal-content h4 {
+    margin-top: 0;
+    color: #a94eff;
+    font-size: 20px;
+}
+
+.modal-content button {
+    background: linear-gradient(to right, #a94eff, #5c00b3);
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+/* Styles for the Scroll Prompt Pop-up */
+.scroll-prompt-content {
+    background-color: #2a2a2a;
+    max-width: 300px;
+    padding-bottom: 20px;
+    cursor: pointer;
+}
+
+.scroll-prompt-content h4 {
+    color: #a94eff;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.scroll-prompt-content p {
+    font-size: 16px;
+    color: #e0e0e0;
+    margin-bottom: 15px;
+}
+
+.scroll-arrow-container {
+    padding-top: 10px;
+}
+
+.scroll-down-arrow {
+    width: 50px;
+    height: 50px;
+    color: #a94eff;
+    animation: bounce 1s infinite alternate;
+}
+
+/* Keyframe animation for the bouncing arrow */
+@keyframes bounce {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(15px);
+    }
+}
+</style>
+</head>
+<body>
+<div class="top-bar">
+<div><img src="logo1.png"><p>BIGGBOSS<br>MALAYALAM_INSTA</p></div>
+<img src="biggboss-logo.png" class="center-logo">
+<div><img src="logo2.png"><p>ALL ABOUT<br>BIGG BOSS</p></div>
+</div>
+<h1>BIGGBOSS MALAYALAM SEASON 7<br> UNOFFICIAL VOTING</h1>
+<h2>WEEK ONE</h2>
+<div class="progress-section">
+<div class="progress-row"><img src="contestant1.png"><div
+class="progress-bar-container"><div class="progress-fill" id="bar1"></div></div><div
+class="percent" id="percent1">0%</div></div>
+<div class="progress-row"><img src="contestant2.png"><div
+class="progress-bar-container"><div class="progress-fill" id="bar2"></div></div><div
+class="percent" id="percent2">0%</div></div>
+<div class="progress-row"><img src="contestant3.png"><div
+class="progress-bar-container"><div class="progress-fill" id="bar3"></div></div><div
+class="percent" id="percent3">0%</div></div>
+<div class="progress-row"><img src="contestant4.png"><div
+class="progress-bar-container"><div class="progress-fill" id="bar4"></div></div><div
+class="percent" id="percent4">0%</div></div>
+<div class="progress-row"><img src="contestant5.png"><div
+class="progress-bar-container"><div class="progress-fill" id="bar5"></div></div><div
+class="percent" id="percent5">0%</div></div>
+<div class="progress-row"><img src="contestant6.png"><div
+class="progress-bar-container"><div class="progress-fill" id="bar6"></div></div><div
+class="percent" id="percent6">0%</div></div>
+<div class="progress-row"><img src="contestant7.png"><div
+class="progress-bar-container"><div class="progress-fill" id="bar7"></div></div><div
+class="percent" id="percent7">0%</div></div>
+<div class="progress-row"><img src="contestant8.png"><div
+class="progress-bar-container"><div class="progress-fill" id="bar8"></div></div><div
+class="percent" id="percent8">0%</div></div>
+</div>
+<div class="vote-box">
+<h3>Vote Now</h3>
+<p id="voteStatus" style="text-align:center; font-size: 14px; color:lightgray; margin-top:10px;"></p>
+<div class="vote-options">
+<div class="vote-card">
+    <img src="contestant1.png">
+    <p>contestant</p>
+    <button onclick="vote(0)">VOTE</button>
+    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-0">0</span></p>
+</div>
+<div class="vote-card">
+    <img src="contestant2.png">
+    <p>contestant</p>
+    <button onclick="vote(1)">VOTE</button>
+    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-1">0</span></p>
+</div>
+<div class="vote-card">
+    <img src="contestant3.png">
+    <p>contestant</p>
+    <button onclick="vote(2)">VOTE</button>
+    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-2">0</span></p>
+</div>
+<div class="vote-card">
+    <img src="contestant4.png">
+    <p>contestant</p>
+    <button onclick="vote(3)">VOTE</button>
+    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-3">0</span></p>
+</div>
+<div class="vote-card">
+    <img src="contestant2.png">
+    <p>contestant</p>
+    <button onclick="vote(4)">VOTE</button>
+    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-4">0</span></p>
+</div>
+<div class="vote-card">
+    <img src="contestant6.png">
+    <p>contestant</p>
+    <button onclick="vote(5)">VOTE</button>
+    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-5">0</span></p>
+</div>
+<div class="vote-card">
+    <img src="contestant7.png">
+    <p>contestant</p>
+    <button onclick="vote(6)">VOTE</button>
+    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-6">0</span></p>
+</div>
+<div class="vote-card">
+    <img src="contestant8.png">
+    <p>contestant</p>
+    <button onclick="vote(7)">VOTE</button>
+    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-7">0</span></p>
+</div>
+<div class="vote-card">
+    <img src="user7.png">
+    <p>contestant</p>
+    <button onclick="vote(8)">VOTE</button>
+    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-8">0</span></p>
+</div>
+
+</div>
+</div>
+<div class="bottom-bar">
+<div class="bottom-card">
+<img src="logo1.png">
+<p>BIGGBOSS
+MALAYALAM_INSTA</p>
+<a href="https://www.instagram.com/biggbossmalayalam_insta" target="_blank"><button
+class="follow-btn">FOLLOW</button></a>
+</div>
+<div class="bottom-card">
+<img src="logo2.png">
+<p>ALL ABOUT BIGG BOSS</p>
+<a href="https://www.instagram.com/allaboutbiggboss" target="_blank"><button
+class="follow-btn">FOLLOW</button></a>
+</div>
+</div>
+<p style="text-align:center; font-size:12px; color:gray; padding:20px;">
+This is a fan-made voting simulation. This is not an official affiliation with Bigg Boss, Asianet, or JioHotstar. We are not responsible for any problems caused by this website.
+</p>
+
+<div id="myModal" class="modal-overlay">
+    <div class="modal-content">
+        <h4 id="modalTitle"></h4>
+        <p id="modalMessage"></p>
+        <button onclick="closeModal()">OK</button>
+    </div>
+</div>
+
+<div id="scrollPromptModal" class="modal-overlay">
+    <div class="modal-content scroll-prompt-content">
+        <h4>Scroll Down to Vote!</h4>
+        <p>The voting section is just below. 👇</p>
+        <div class="scroll-arrow-container">
+            <svg class="scroll-down-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 21l-7-7h4V3h6v11h4z"/>
+            </svg>
+        </div>
+    </div>
+</div>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyCWs_SbP-PhVXwEZQdOIk_ViupZBviHUk0", /* Replace with your Firebase API Key */
+        authDomain: "biggboss-voting-malayalam.firebaseapp.com", /* Replace with your Firebase Auth Domain */
+        databaseURL: "https://biggboss-voting-malayalam-default-rtdb.firebaseio.com", /* Replace with your Firebase Database URL */
+        projectId: "biggboss-voting-malayalam", /* Replace with your Firebase Project ID */
+        storageBucket: "biggboss-voting-malayalam.firebasestorage.app", /* Replace with your Firebase Storage Bucket */
+        messagingSenderId: "912043278492", /* Replace with your Firebase Messaging Sender ID */
+        appId: "1:912043278492:web:b71817eb68bc7733852d59" /* Replace with your Firebase App ID */
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const voteCounts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // Renamed voteCount to dailyVoteCount for clarity as it resets daily
+    let dailyVoteCount = parseInt(localStorage.getItem("dailyVoteCount")) || 0;
+    // Renamed voteStartTime to lastResetDay to clearly indicate its purpose
+    let lastResetDay = parseInt(localStorage.getItem("lastResetDay")) || 0;
+    const voteLimit = 50;
+
+    let userIndividualVotes = new Array(voteCounts.length).fill(0);
+
+    // This function calculates the next midnight for displaying time remaining, not for reset logic
+    function getMidnightTimestamp() {
+        const now = new Date();
+        const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
+        return midnight.getTime();
+    }
+
+    // This function calculates the timestamp for the beginning of the current day
+    function getTodayStartTimestamp() {
+        const now = new Date();
+        return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0).getTime();
+    }
+
+    function updateVoteStatus() {
+        const remaining = Math.max(0, voteLimit - dailyVoteCount);
+        const statusText = `${remaining} vote${remaining === 1 ? '' : 's'} left today`;
+        const statusEl = document.getElementById("voteStatus");
+        if (statusEl) {
+            statusEl.innerText = statusText;
+        }
+    }
+
+    function initializeIndividualVotes() {
+        for (let i = 0; i < userIndividualVotes.length; i++) {
+            const storedUserVotes = localStorage.getItem(`userVotes_contestant_${i}`);
+            if (storedUserVotes) {
+                userIndividualVotes[i] = parseInt(storedUserVotes);
+            } else {
+                userIndividualVotes[i] = 0;
+            }
+            updateIndividualVoteDisplay(i);
+        }
+    }
+
+    function updateIndividualVoteDisplay(index) {
+        const displayElement = document.getElementById(`user-votes-${index}`);
+        if (displayElement) {
+            displayElement.textContent = userIndividualVotes[index];
+        }
+    }
+
+    function updateUI() {
+        const total = voteCounts.reduce((a, b) => a + b, 0);
+        voteCounts.forEach((count, i) => {
+            const percent = total ? Math.round((count / total) * 100) : 0;
+            document.getElementById("bar" + (i + 1)).style.width = percent + "%";
+            document.getElementById("percent" + (i + 1)).innerText = percent + "%";
+        });
+    }
+
+    function fetchVotes() {
+        db.ref("votes").on("value", (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                voteCounts[0] = data.vote1 || 0;
+                voteCounts[1] = data.vote2 || 0;
+                voteCounts[2] = data.vote3 || 0;
+                voteCounts[3] = data.vote4 || 0;
+                voteCounts[4] = data.vote5 || 0;
+                voteCounts[5] = data.vote6 || 0;
+                voteCounts[6] = data.vote7 || 0;
+                voteCounts[7] = data.vote8 || 0;
+                voteCounts[8] = data.vote9 || 0;
+                voteCounts[9] = data.vote10 || 0;
+            }
+            updateUI();
+        });
+    }
+
+    // Functions for the custom modal
+    function showModal(title, message) {
+        document.getElementById("modalTitle").innerText = title;
+        document.getElementById("modalMessage").innerText = message;
+        document.getElementById("myModal").style.display = "flex";
+    }
+
+    function closeModal() {
+        document.getElementById("myModal").style.display = "none";
+    }
+
+    // Function to show the scroll prompt modal
+    function showScrollPrompt() {
+        const scrollModal = document.getElementById("scrollPromptModal");
+        // Only show if the user hasn't scrolled yet (check if they are at the top)
+        if (window.scrollY === 0) {
+            scrollModal.style.display = "flex";
+
+            setTimeout(() => {
+                scrollModal.style.display = "none";
+            }, 5000); // Hide after 5 seconds
+
+            scrollModal.onclick = () => {
+                const voteBox = document.querySelector(".vote-box");
+                if (voteBox) {
+                    voteBox.scrollIntoView({ behavior: 'smooth' });
+                }
+                closeScrollPrompt();
+            };
+        }
+    }
+
+    // Function to close the scroll prompt modal directly
+    function closeScrollPrompt() {
+        document.getElementById("scrollPromptModal").style.display = "none";
+    }
+
+    // Core logic for daily vote reset
+    function checkAndResetDailyVotes() {
+        const todayStart = getTodayStartTimestamp(); // Midnight of the current day
+        const storedLastResetDay = parseInt(localStorage.getItem("lastResetDay")) || 0;
+
+        // If it's the very first visit (storedLastResetDay is 0)
+        // OR if the current day's start is later than the stored last reset day
+        // (meaning a new day has begun since the last reset)
+        if (storedLastResetDay === 0 || todayStart > storedLastResetDay) {
+            console.log("Resetting daily votes...");
+            dailyVoteCount = 0; // Reset total daily vote count
+            localStorage.setItem("dailyVoteCount", dailyVoteCount);
+
+            // Reset individual vote counts
+            userIndividualVotes.fill(0);
+            for (let i = 0; i < userIndividualVotes.length; i++) {
+                localStorage.setItem(`userVotes_contestant_${i}`, 0);
+                updateIndividualVoteDisplay(i); // Update UI for individual votes
+            }
+
+            // Update the last reset day to the start of the current day
+            lastResetDay = todayStart;
+            localStorage.setItem("lastResetDay", lastResetDay);
+
+            updateVoteStatus(); // Update the vote status message
+        }
+    }
+
+    function vote(index) {
+        // Always call checkAndResetDailyVotes before processing a vote
+        // This ensures the reset happens on the first interaction of a new day
+        checkAndResetDailyVotes();
+
+        if (dailyVoteCount >= voteLimit) {
+            const now = Date.now();
+            const nextMidnight = getMidnightTimestamp(); // Use this for display only
+            const timeLeft = nextMidnight - now;
+            const hrs = Math.floor(timeLeft / (1000 * 60 * 60));
+            const mins = Math.ceil((timeLeft % (1000 * 60 * 60)) / 60000);
+            let timeMessage = "";
+            if (hrs > 0) {
+                timeMessage += `${hrs} hour${hrs === 1 ? '' : 's'} `;
+            }
+            timeMessage += `${mins} minute${mins === 1 ? '' : 's'}`;
+
+            showModal("Vote Limit Reached!", `Today's voting limit reached. Come back after ${timeMessage}. Thanks for Voting.`);
+            return;
+        }
+
+        db.ref("votes").once("value").then((snapshot) => {
+            const data = snapshot.val() || {};
+            voteCounts[0] = data.vote1 || 0;
+            voteCounts[1] = data.vote2 || 0;
+            voteCounts[2] = data.vote3 || 0;
+            voteCounts[3] = data.vote4 || 0;
+            voteCounts[4] = data.vote5 || 0;
+            voteCounts[5] = data.vote6 || 0;
+            voteCounts[6] = data.vote7 || 0;
+            voteCounts[7] = data.vote8 || 0;
+            voteCounts[8] = data.vote9 || 0;
+            voteCounts[9] = data.vote10 || 0;
+
+            voteCounts[index]++;
+            dailyVoteCount++; // Increment the daily vote counter
+
+            userIndividualVotes[index]++;
+            localStorage.setItem(`userVotes_contestant_${index}`, userIndividualVotes[index]);
+            updateIndividualVoteDisplay(index);
+
+            localStorage.setItem("dailyVoteCount", dailyVoteCount); // Save updated daily vote count
+            // Call updateVoteStatus right after incrementing dailyVoteCount and saving it
+            updateVoteStatus(); // This is the crucial line for live update
+
+            db.ref("votes").set({
+                vote1: voteCounts[0],
+                vote2: voteCounts[1],
+                vote3: voteCounts[2],
+                vote4: voteCounts[3],
+                vote5: voteCounts[4],
+                vote6: voteCounts[5],
+                vote7: voteCounts[6],
+                vote8: voteCounts[7],
+                vote9: voteCounts[8],
+                vote10: voteCounts[9]
+            }).then(() => {
+                updateUI();
+                // updateVoteStatus() is already called above, so no need to call it here again
+            });
+        });
+    }
+
+    // Call checkAndResetDailyVotes on page load to handle resets for the current day
+    checkAndResetDailyVotes();
+    fetchVotes(); // Fetch votes from Firebase after potential reset
+    updateVoteStatus(); // Update vote status based on current dailyVoteCount
+    initializeIndividualVotes(); // Load and display individual votes
+
+    // Call showScrollPrompt when the page loads
+    window.onload = showScrollPrompt;
+</script>
+</body>
+</html>
