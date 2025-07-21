@@ -239,9 +239,6 @@ class="percent" id="percent7">0%</div></div>
 <div class="progress-row"><img src="contestant8.png"><div
 class="progress-bar-container"><div class="progress-fill" id="bar8"></div></div><div
 class="percent" id="percent8">0%</div></div>
-<div class="progress-row"><img src="user7.png"><div
-class="progress-bar-container"><div class="progress-fill" id="bar9"></div></div><div
-class="percent" id="percent9">0%</div></div>
 </div>
 <div class="vote-box">
 <h3>Vote Now</h3>
@@ -249,57 +246,59 @@ class="percent" id="percent9">0%</div></div>
 <div class="vote-options">
 <div class="vote-card">
     <img src="contestant1.png">
-    <p>Contestant 1</p>
+    <p>contestant</p>
     <button onclick="vote(0)">VOTE</button>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-0">0</span></p>
 </div>
 <div class="vote-card">
     <img src="contestant2.png">
-    <p>Contestant 2</p>
+    <p>contestant</p>
     <button onclick="vote(1)">VOTE</button>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-1">0</span></p>
 </div>
 <div class="vote-card">
     <img src="contestant3.png">
-    <p>Contestant 3</p>
+    <p>contestant</p>
     <button onclick="vote(2)">VOTE</button>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-2">0</span></p>
 </div>
 <div class="vote-card">
     <img src="contestant4.png">
-    <p>Contestant 4</p>
+    <p>contestant</p>
     <button onclick="vote(3)">VOTE</button>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-3">0</span></p>
 </div>
 <div class="vote-card">
-    <img src="contestant5.png">
-    <p>Contestant 5</p>
+    <img src="contestant2.png">
+    <p>contestant</p>
     <button onclick="vote(4)">VOTE</button>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-4">0</span></p>
 </div>
 <div class="vote-card">
     <img src="contestant6.png">
-    <p>Contestant 6</p>
+    <p>contestant</p>
     <button onclick="vote(5)">VOTE</button>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-5">0</span></p>
 </div>
 <div class="vote-card">
     <img src="contestant7.png">
-    <p>Contestant 7</p>
+    <p>contestant</p>
     <button onclick="vote(6)">VOTE</button>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-6">0</span></p>
 </div>
 <div class="vote-card">
     <img src="contestant8.png">
-    <p>Contestant 8</p>
+    <p>contestant</p>
     <button onclick="vote(7)">VOTE</button>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-7">0</span></p>
 </div>
 <div class="vote-card">
-    <img src="user7.png"> <p>Contestant 9</p>
+    <img src="user7.png">
+    <p>contestant</p>
     <button onclick="vote(8)">VOTE</button>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-8">0</span></p>
 </div>
+
 </div>
 </div>
 <div class="bottom-bar">
@@ -353,20 +352,23 @@ This is a fan-made voting simulation. This is not an official affiliation with B
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // Adjusted voteCounts to match the 9 visible contestants in HTML
-    const voteCounts = [0, 0, 0, 0, 0, 0, 0, 0, 0]; // For vote1 to vote9
+    const voteCounts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // Renamed voteCount to dailyVoteCount for clarity as it resets daily
     let dailyVoteCount = parseInt(localStorage.getItem("dailyVoteCount")) || 0;
+    // Renamed voteStartTime to lastResetDay to clearly indicate its purpose
     let lastResetDay = parseInt(localStorage.getItem("lastResetDay")) || 0;
     const voteLimit = 50;
 
     let userIndividualVotes = new Array(voteCounts.length).fill(0);
 
+    // This function calculates the next midnight for displaying time remaining, not for reset logic
     function getMidnightTimestamp() {
         const now = new Date();
         const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
         return midnight.getTime();
     }
 
+    // This function calculates the timestamp for the beginning of the current day
     function getTodayStartTimestamp() {
         const now = new Date();
         return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0).getTime();
@@ -410,16 +412,25 @@ This is a fan-made voting simulation. This is not an official affiliation with B
     }
 
     function fetchVotes() {
-        // This listener will keep voteCounts array updated in real-time
         db.ref("votes").on("value", (snapshot) => {
-            const data = snapshot.val() || {};
-            for (let i = 0; i < voteCounts.length; i++) {
-                voteCounts[i] = data[`vote${i + 1}`] || 0;
+            const data = snapshot.val();
+            if (data) {
+                voteCounts[0] = data.vote1 || 0;
+                voteCounts[1] = data.vote2 || 0;
+                voteCounts[2] = data.vote3 || 0;
+                voteCounts[3] = data.vote4 || 0;
+                voteCounts[4] = data.vote5 || 0;
+                voteCounts[5] = data.vote6 || 0;
+                voteCounts[6] = data.vote7 || 0;
+                voteCounts[7] = data.vote8 || 0;
+                voteCounts[8] = data.vote9 || 0;
+                voteCounts[9] = data.vote10 || 0;
             }
             updateUI();
         });
     }
 
+    // Functions for the custom modal
     function showModal(title, message) {
         document.getElementById("modalTitle").innerText = title;
         document.getElementById("modalMessage").innerText = message;
@@ -430,14 +441,16 @@ This is a fan-made voting simulation. This is not an official affiliation with B
         document.getElementById("myModal").style.display = "none";
     }
 
+    // Function to show the scroll prompt modal
     function showScrollPrompt() {
         const scrollModal = document.getElementById("scrollPromptModal");
+        // Only show if the user hasn't scrolled yet (check if they are at the top)
         if (window.scrollY === 0) {
             scrollModal.style.display = "flex";
 
             setTimeout(() => {
                 scrollModal.style.display = "none";
-            }, 5000);
+            }, 5000); // Hide after 5 seconds
 
             scrollModal.onclick = () => {
                 const voteBox = document.querySelector(".vote-box");
@@ -449,44 +462,47 @@ This is a fan-made voting simulation. This is not an official affiliation with B
         }
     }
 
+    // Function to close the scroll prompt modal directly
     function closeScrollPrompt() {
         document.getElementById("scrollPromptModal").style.display = "none";
     }
 
+    // Core logic for daily vote reset
     function checkAndResetDailyVotes() {
-        const todayStart = getTodayStartTimestamp();
+        const todayStart = getTodayStartTimestamp(); // Midnight of the current day
         const storedLastResetDay = parseInt(localStorage.getItem("lastResetDay")) || 0;
 
+        // If it's the very first visit (storedLastResetDay is 0)
+        // OR if the current day's start is later than the stored last reset day
+        // (meaning a new day has begun since the last reset)
         if (storedLastResetDay === 0 || todayStart > storedLastResetDay) {
             console.log("Resetting daily votes...");
-            dailyVoteCount = 0;
+            dailyVoteCount = 0; // Reset total daily vote count
             localStorage.setItem("dailyVoteCount", dailyVoteCount);
 
+            // Reset individual vote counts
             userIndividualVotes.fill(0);
             for (let i = 0; i < userIndividualVotes.length; i++) {
                 localStorage.setItem(`userVotes_contestant_${i}`, 0);
-                updateIndividualVoteDisplay(i);
+                updateIndividualVoteDisplay(i); // Update UI for individual votes
             }
 
+            // Update the last reset day to the start of the current day
             lastResetDay = todayStart;
             localStorage.setItem("lastResetDay", lastResetDay);
 
-            updateVoteStatus();
+            updateVoteStatus(); // Update the vote status message
         }
     }
 
     function vote(index) {
-        // Ensure index is within the bounds of voteCounts array
-        if (index < 0 || index >= voteCounts.length) {
-            console.error("Invalid contestant index.");
-            return;
-        }
-
+        // Always call checkAndResetDailyVotes before processing a vote
+        // This ensures the reset happens on the first interaction of a new day
         checkAndResetDailyVotes();
 
         if (dailyVoteCount >= voteLimit) {
             const now = Date.now();
-            const nextMidnight = getMidnightTimestamp();
+            const nextMidnight = getMidnightTimestamp(); // Use this for display only
             const timeLeft = nextMidnight - now;
             const hrs = Math.floor(timeLeft / (1000 * 60 * 60));
             const mins = Math.ceil((timeLeft % (1000 * 60 * 60)) / 60000);
@@ -500,52 +516,55 @@ This is a fan-made voting simulation. This is not an official affiliation with B
             return;
         }
 
-        // Increment local vote count
-        voteCounts[index]++;
-        dailyVoteCount++;
-        userIndividualVotes[index]++;
+        db.ref("votes").once("value").then((snapshot) => {
+            const data = snapshot.val() || {};
+            voteCounts[0] = data.vote1 || 0;
+            voteCounts[1] = data.vote2 || 0;
+            voteCounts[2] = data.vote3 || 0;
+            voteCounts[3] = data.vote4 || 0;
+            voteCounts[4] = data.vote5 || 0;
+            voteCounts[5] = data.vote6 || 0;
+            voteCounts[6] = data.vote7 || 0;
+            voteCounts[7] = data.vote8 || 0;
+            voteCounts[8] = data.vote9 || 0;
+            voteCounts[9] = data.vote10 || 0;
 
-        // Update local storage
-        localStorage.setItem(`userVotes_contestant_${index}`, userIndividualVotes[index]);
-        localStorage.setItem("dailyVoteCount", dailyVoteCount);
+            voteCounts[index]++;
+            dailyVoteCount++; // Increment the daily vote counter
 
-        // Update UI immediately
-        updateIndividualVoteDisplay(index);
-        updateVoteStatus();
-        updateUI(); // This will be triggered by Firebase listener too, but a local update gives instant feedback
+            userIndividualVotes[index]++;
+            localStorage.setItem(`userVotes_contestant_${index}`, userIndividualVotes[index]);
+            updateIndividualVoteDisplay(index);
 
-        // Prepare object to send to Firebase
-        const firebaseUpdate = {};
-        for (let i = 0; i < voteCounts.length; i++) {
-            firebaseUpdate[`vote${i + 1}`] = voteCounts[i];
-        }
+            localStorage.setItem("dailyVoteCount", dailyVoteCount); // Save updated daily vote count
+            // Call updateVoteStatus right after incrementing dailyVoteCount and saving it
+            updateVoteStatus(); // This is the crucial line for live update
 
-        // Update Firebase
-        db.ref("votes").set(firebaseUpdate)
-            .then(() => {
-                console.log("Vote successfully updated in Firebase!");
-            })
-            .catch((error) => {
-                console.error("Error updating vote in Firebase:", error);
-                showModal("Error", "There was an error casting your vote. Please try again.");
-                // Potentially revert local counts if Firebase update fails
-                voteCounts[index]--;
-                dailyVoteCount--;
-                userIndividualVotes[index]--;
-                localStorage.setItem(`userVotes_contestant_${index}`, userIndividualVotes[index]);
-                localStorage.setItem("dailyVoteCount", dailyVoteCount);
-                updateIndividualVoteDisplay(index);
-                updateVoteStatus();
+            db.ref("votes").set({
+                vote1: voteCounts[0],
+                vote2: voteCounts[1],
+                vote3: voteCounts[2],
+                vote4: voteCounts[3],
+                vote5: voteCounts[4],
+                vote6: voteCounts[5],
+                vote7: voteCounts[6],
+                vote8: voteCounts[7],
+                vote9: voteCounts[8],
+                vote10: voteCounts[9]
+            }).then(() => {
                 updateUI();
+                // updateVoteStatus() is already called above, so no need to call it here again
             });
+        });
     }
 
-    // Initial calls on page load
+    // Call checkAndResetDailyVotes on page load to handle resets for the current day
     checkAndResetDailyVotes();
-    fetchVotes();
-    updateVoteStatus();
-    initializeIndividualVotes();
+    fetchVotes(); // Fetch votes from Firebase after potential reset
+    updateVoteStatus(); // Update vote status based on current dailyVoteCount
+    initializeIndividualVotes(); // Load and display individual votes
 
+    // Call showScrollPrompt when the page loads
     window.onload = showScrollPrompt;
 </script>
 </body>
