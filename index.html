@@ -215,36 +215,21 @@ font-size: 12px;
 <h1>BIGGBOSS MALAYALAM SEASON 7<br> UNOFFICIAL VOTING</h1>
 <h2>WEEK ONE</h2>
 <div class="progress-section">
-<div class="progress-row"><img src="Aneesh.jpg"><div
-class="progress-bar-container"><div class="progress-fill" id="bar1"></div></div><div
-class="percent" id="percent1">0%</div></div>
 <div class="progress-row"><img src="Anumol.jpg"><div
 class="progress-bar-container"><div class="progress-fill" id="bar2"></div></div><div
 class="percent" id="percent2">0%</div></div>
 <div class="progress-row"><img src="Aryan.jpg"><div
 class="progress-bar-container"><div class="progress-fill" id="bar3"></div></div><div
 class="percent" id="percent3">0%</div></div>
-<div class="progress-row"><img src="Sariga.jpg"><div
-class="progress-bar-container"><div class="progress-fill" id="bar4"></div></div><div
-class="percent" id="percent4">0%</div></div>
 <div class="progress-row"><img src="Akbar-khan.jpg"><div
 class="progress-bar-container"><div class="progress-fill" id="bar5"></div></div><div
 class="percent" id="percent5">0%</div></div>
-<div class="progress-row"><img src="Rj-Bincy.jpg"><div
-class="progress-bar-container"><div class="progress-fill" id="bar6"></div></div><div
-class="percent" id="percent6">0%</div></div>
 <div class="progress-row"><img src="Binny-Sebastian.jpg"><div
 class="progress-bar-container"><div class="progress-fill" id="bar7"></div></div><div
 class="percent" id="percent7">0%</div></div>
 <div class="progress-row"><img src="Abhisree.jpg"><div
 class="progress-bar-container"><div class="progress-fill" id="bar8"></div></div><div
 class="percent" id="percent8">0%</div></div>
-<div class="progress-row"><img src="Appani-Sarath.jpg"><div
-class="progress-bar-container"><div class="progress-fill" id="bar9"></div></div><div
-class="percent" id="percent8">0%</div></div>
-<div class="progress-row"><img src="Rena-Fathima.jpg"><div
-class="progress-bar-container"><div class="progress-fill" id="bar10"></div></div><div
-class="percent" id="percent9">0%</div></div>
 <div class="progress-row"><img src="Munshi-Renjith.jpg"><div
 class="progress-bar-container"><div class="progress-fill" id="bar11"></div></div><div
 class="percent" id="percent10">0%</div></div>
@@ -278,12 +263,6 @@ class="percent" id="percent18">0%</div></div>
 <p id="voteStatus" style="text-align:center; font-size: 14px; color:lightgray; margin-top:10px;"></p>
 <div class="vote-options">
 <div class="vote-card">
-    <img src="Aneesh.jpg">
-    <p>Aneesh</p>
-    <button onclick="vote(0)">VOTE</button>
-    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-0">0</span></p>
-</div>
-<div class="vote-card">
     <img src="Anumol.jpg">
     <p>Anumol</p>
     <button onclick="vote(1)">VOTE</button>
@@ -296,22 +275,10 @@ class="percent" id="percent18">0%</div></div>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-2">0</span></p>
 </div>
 <div class="vote-card">
-    <img src="Sariga.jpg">
-    <p>Sariga</p>
-    <button onclick="vote(3)">VOTE</button>
-    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-3">0</span></p>
-</div>
-<div class="vote-card">
     <img src="Akbar-khan.jpg">
     <p>Akbar khan</p>
     <button onclick="vote(4)">VOTE</button>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-4">0</span></p>
-</div>
-<div class="vote-card">
-    <img src="Rj-Bincy.jpg">
-    <p>Rj bincy</p>
-    <button onclick="vote(5)">VOTE</button>
-    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-5">0</span></p>
 </div>
 <div class="vote-card">
     <img src="Binny-Sebastian.jpg">
@@ -324,18 +291,6 @@ class="percent" id="percent18">0%</div></div>
     <p>Abhisree</p>
     <button onclick="vote(7)">VOTE</button>
     <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-7">0</span></p>
-</div>
-<div class="vote-card">
-    <img src="Appani-Sarath.jpg">
-    <p>Appani Sarath</p>
-    <button onclick="vote(8)">VOTE</button>
-    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-8">0</span></p>
-</div>
-<div class="vote-card">
-    <img src="Rena-Fathima.jpg">
-    <p>Rena Fathima</p>
-    <button onclick="vote(9)">VOTE</button>
-    <p class="your-votes-display">Your Votes: <span class="your-votes-count" id="user-votes-9">0</span></p>
 </div>
 <div class="vote-card">
     <img src="Munshi-Renjith.jpg">
@@ -522,10 +477,7 @@ This is a fan-made voting simulation. This is not an official affiliation with B
                 voteCounts[11] = data.vote12 || 0;
                 voteCounts[12] = data.vote13 || 0;
                 voteCounts[13] = data.vote14 || 0;
-                voteCounts[14] = data.vote15 || 0;
-                voteCounts[15] = data.vote16 || 0;
-                voteCounts[16] = data.vote17 || 0;
-                voteCounts[17] = data.vote18 || 0;
+                
             }
             updateUI();
         });
@@ -633,10 +585,7 @@ This is a fan-made voting simulation. This is not an official affiliation with B
             voteCounts[11] = data.vote12 || 0;
             voteCounts[12] = data.vote13 || 0;
             voteCounts[13] = data.vote14 || 0;
-            voteCounts[14] = data.vote15 || 0;
-            voteCounts[15] = data.vote16 || 0;
-            voteCounts[16] = data.vote17 || 0;
-            voteCounts[17] = data.vote18 || 0;
+            
            
 
 
@@ -661,7 +610,13 @@ This is a fan-made voting simulation. This is not an official affiliation with B
                 vote7: voteCounts[6],
                 vote8: voteCounts[7],
                 vote9: voteCounts[8],
-                vote10: voteCounts[9]
+                vote10: voteCounts[9],
+                vote11: voteCounts[10],
+                vote12: voteCounts[11],
+                vote13: voteCounts[12],
+                vote14: voteCounts[13]
+                
+
                 
             }).then(() => {
                 updateUI();
