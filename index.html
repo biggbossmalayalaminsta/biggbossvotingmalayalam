@@ -244,34 +244,34 @@ class="progress-bar-container"><div class="progress-fill" id="bar9"></div></div>
 class="percent" id="percent8">0%</div></div>
 <div class="progress-row"><img src="Rena-Fathima.jpg"><div
 class="progress-bar-container"><div class="progress-fill" id="bar10"></div></div><div
-class="percent" id="percent8">0%</div></div>
+class="percent" id="percent9">0%</div></div>
 <div class="progress-row"><img src="Munshi-Renjith.jpg"><div
 class="progress-bar-container"><div class="progress-fill" id="bar11"></div></div><div
-class="percent" id="percent8">0%</div></div>
+class="percent" id="percent10">0%</div></div>
 <div class="progress-row"><img src="Gizelethakral.jpg"><div
 class="progress-bar-container"><div class="progress-fill" id="bar12"></div></div><div
-class="percent" id="percent8">0%</div></div>
+class="percent" id="percent11">0%</div></div>
 <div class="progress-row"><img src="Sarika.jpg"><div
 class="progress-bar-container"><div class="progress-fill" id="bar13"></div></div><div
-class="percent" id="percent8">0%</div></div>
+class="percent" id="percent12">0%</div></div>
 <div class="progress-row"><img src="Shanavas.jpg"><div
 class="progress-bar-container"><div class="progress-fill" id="bar14"></div></div><div
-class="percent" id="percent8">0%</div></div>
+class="percent" id="percent13">0%</div></div>
 <div class="progress-row"><img src="Nevin.jpg"><div
 class="progress-bar-container"><div class="progress-fill" id="bar15"></div></div><div
-class="percent" id="percent8">0%</div></div>
+class="percent" id="percent14">0%</div></div>
 <div class="progress-row"><img src="Adhila-Noora.jpg"><div
 class="progress-bar-container"><div class="progress-fill" id="bar16"></div></div><div
-class="percent" id="percent8">0%</div></div>
+class="percent" id="percent15">0%</div></div>
 <div class="progress-row"><img src="shaitya.jpg"><div
 class="progress-bar-container"><div class="progress-fill" id="bar17"></div></div><div
-class="percent" id="percent8">0%</div></div>
+class="percent" id="percent16">0%</div></div>
 <div class="progress-row"><img src="Renu-Sudi.jpg"><div
 class="progress-bar-container"><div class="progress-fill" id="bar18"></div></div><div
-class="percent" id="percent8">0%</div></div>
+class="percent" id="percent17">0%</div></div>
 <div class="progress-row"><img src="Oneal-Sabu.jpg"><div
 class="progress-bar-container"><div class="progress-fill" id="bar19"></div></div><div
-class="percent" id="percent8">0%</div></div>
+class="percent" id="percent18">0%</div></div>
 </div>
 <div class="vote-box">
 <h3>Vote Now</h3>
@@ -518,6 +518,14 @@ This is a fan-made voting simulation. This is not an official affiliation with B
                 voteCounts[7] = data.vote8 || 0;
                 voteCounts[8] = data.vote9 || 0;
                 voteCounts[9] = data.vote10 || 0;
+                voteCounts[10] = data.vote11 || 0;
+                voteCounts[11] = data.vote12 || 0;
+                voteCounts[12] = data.vote13 || 0;
+                voteCounts[13] = data.vote14 || 0;
+                voteCounts[14] = data.vote15 || 0;
+                voteCounts[15] = data.vote16 || 0;
+                voteCounts[16] = data.vote17 || 0;
+                voteCounts[17] = data.vote18 || 0;
             }
             updateUI();
         });
@@ -621,6 +629,16 @@ This is a fan-made voting simulation. This is not an official affiliation with B
             voteCounts[7] = data.vote8 || 0;
             voteCounts[8] = data.vote9 || 0;
             voteCounts[9] = data.vote10 || 0;
+            voteCounts[10] = data.vote11 || 0;
+            voteCounts[11] = data.vote12 || 0;
+            voteCounts[12] = data.vote13 || 0;
+            voteCounts[13] = data.vote14 || 0;
+            voteCounts[14] = data.vote15 || 0;
+            voteCounts[15] = data.vote16 || 0;
+            voteCounts[16] = data.vote17 || 0;
+            voteCounts[17] = data.vote18 || 0;
+           
+
 
             voteCounts[index]++;
             dailyVoteCount++; // Increment the daily vote counter
@@ -644,6 +662,7 @@ This is a fan-made voting simulation. This is not an official affiliation with B
                 vote8: voteCounts[7],
                 vote9: voteCounts[8],
                 vote10: voteCounts[9]
+                
             }).then(() => {
                 updateUI();
                 // updateVoteStatus() is already called above, so no need to call it here again
