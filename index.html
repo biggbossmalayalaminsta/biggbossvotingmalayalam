@@ -411,7 +411,7 @@ This is a fan-made voting simulation. This is not an official affiliation with B
     let dailyVoteCount = parseInt(localStorage.getItem("dailyVoteCount")) || 0;
     // Renamed voteStartTime to lastResetDay to clearly indicate its purpose
     let lastResetDay = parseInt(localStorage.getItem("lastResetDay")) || 0;
-    const voteLimit = 50;
+    const voteLimit = 1;
 
     let userIndividualVotes = new Array(voteCounts.length).fill(0);
 
